@@ -192,7 +192,7 @@ public class FCMPlugin extends CordovaPlugin {
                     // Get new Instance ID token
                     String newToken = task.getResult().getToken();
 
-                    intercomPushClient.sendTokenToIntercom(getApplication(), newToken);
+                    intercomPushClient.sendTokenToIntercom(cordova.getActivity().getApplication(), newToken);
 
                     Log.i(TAG, "\tToken: " + newToken);
                     callback.success(newToken);
