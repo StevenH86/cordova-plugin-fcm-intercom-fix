@@ -14,12 +14,16 @@ import java.util.HashMap;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import io.intercom.android.sdk.push.IntercomPushClient;
+
 /**
  * Created by Felipe Echanique on 08/06/2016.
  */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCMPlugin";
+
+    private final IntercomPushClient intercomPushClient = new IntercomPushClient();
 
     @Override
     public void onNewToken(String token) {
@@ -41,6 +45,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
         Log.d(TAG, "==> MyFirebaseMessagingService onMessageReceived");
         
+
+        if (intercomPushClient.isIntercomPush(remoteMessage.getData())) {
+            intercomPushClient.handlePush(getApplication(), remoteMessage.getData());
+            return;
+        }
+
         if(remoteMessage.getNotification() != null){
             Log.d(TAG, "\tNotification Title: " + remoteMessage.getNotification().getTitle());
             Log.d(TAG, "\tNotification Message: " + remoteMessage.getNotification().getBody());

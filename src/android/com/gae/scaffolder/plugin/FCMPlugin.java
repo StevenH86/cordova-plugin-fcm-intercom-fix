@@ -14,6 +14,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import io.intercom.android.sdk.push.IntercomPushClient;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -35,6 +37,8 @@ public class FCMPlugin extends CordovaPlugin {
     protected static OnFinishedListener<JSONObject> notificationFn = null;
     private static final String TAG = "FCMPlugin";
     private static CordovaPlugin instance = null;
+
+    private final IntercomPushClient intercomPushClient = new IntercomPushClient();
 
     public FCMPlugin() {}
     public FCMPlugin(Context context) {
@@ -187,6 +191,8 @@ public class FCMPlugin extends CordovaPlugin {
 
                     // Get new Instance ID token
                     String newToken = task.getResult().getToken();
+
+                    intercomPushClient.sendTokenToIntercom(getApplication(), newToken);
 
                     Log.i(TAG, "\tToken: " + newToken);
                     callback.success(newToken);
